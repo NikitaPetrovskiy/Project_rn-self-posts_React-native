@@ -4,6 +4,7 @@ import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import { Platform } from 'react-native';
+import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
 
 import { BookedScreen } from '../screens/BookedScreen';
 import { MainScreen } from '../screens/MainScreen';
@@ -41,26 +42,35 @@ const BookedNavigator = createStackNavigator(
     }
 );
 
-const BottomNavigator = createBottomTabNavigator(
-    {
-        Post: {
-            screen: PostNavigator,
-            navigationOptions: {
-                tabBarIcon : info => (
-                    <Ionicons name="ios-albums" size={25} color={info.tintColor} />
-                )
-            }
-        },
-        Booked: {
-            screen: BookedNavigator,
-            navigationOptions: {
-                tabBarIcon : info => (
-                    <Ionicons name="ios-star" size={25} color={info.tintColor} />
-                )
-            } 
+const bottomTabsConfig = {
+    Post: {
+        screen: PostNavigator,
+        navigationOptions: {
+            tabBarLabel: "Все",
+            tabBarIcon : info => (
+                <Ionicons name="ios-albums" size={25} color={info.tintColor} />
+            )
         }
     },
-    {
+    Booked: {
+        screen: BookedNavigator,
+        navigationOptions: {
+            tabBarLabel: "Избранные",
+            tabBarIcon : info => (
+                <Ionicons name="ios-star" size={25} color={info.tintColor} />
+            )
+        } 
+    }
+};
+
+const BottomNavigator = Platform.OS === 'android' ? 
+    createMaterialBottomTabNavigator(bottomTabsConfig,  {
+        activeTintColor: '#fff',
+        shifting: true,
+        barStyle: {
+            backgroundColor: THEME.MAIN_COLOR
+        }
+    }) : createBottomTabNavigator(bottomTabsConfig, {
         tabBarOptions: {
             activeTintColor: THEME.MAIN_COLOR
         }
