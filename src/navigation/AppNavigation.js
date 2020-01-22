@@ -71,14 +71,34 @@ const BottomNavigator = Platform.OS === 'android' ?
 const AboutNavigator = createStackNavigator({ About: AboutScreen }, navigatorOptions);
 const CreateNavigator = createStackNavigator({ Create: CreateScreen }, navigatorOptions);
 
-const MainNavigator = createDrawerNavigator({
-    Post: {
-        screen: BottomNavigator
+const MainNavigator = createDrawerNavigator(
+    {
+        Post: {
+            screen: BottomNavigator,
+            navigationOptions: {
+                drawerLabel: "Главная"
+            }
+        },
+        About: {
+            screen: AboutNavigator,
+            navigationOptions: {
+                drawerLabel: "О приложении"
+            }
+        },
+        Create: {
+            screen: CreateNavigator,
+            navigationOptions: {
+                drawerLabel: "Создать пост"
+            }
+        }
     },
-    About: {
-        screen: AboutNavigator
-    },
-    Create: CreateNavigator
-})
+    {
+        contentOptions: {
+            activeTintColor: THEME.MAIN_COLOR,
+            labelStyle: {
+                fontFamily: 'open-bold'
+            }
+        }
+    });
 
 export const AppNavigation = createAppContainer(MainNavigator);
