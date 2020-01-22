@@ -6,7 +6,7 @@ import { AppHeaderIcon } from '../components/AppHeaderIcon'
 export const CreateScreen = ({}) => {
     return (
         <View style={styles.center}>
-            <Text>Create screen</Text>
+            <Text>Создать пост</Text>
         </View>
     );
 }
