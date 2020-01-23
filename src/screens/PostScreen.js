@@ -4,14 +4,16 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { AppHeaderIcon } from '../components/AppHeaderIcon';
-import { DATA } from '../data';
 import { THEME } from '../theme';
-import { toggleBooked } from '../store/actions/post';
+import { toggleBooked, removePost } from '../store/actions/post';
 
 export const PostScreen = ({ navigation }) => {
-    const postId = navigation.getParam('postId');
-    const post = DATA.find(p => p.id === postId);
     const dispatch = useDispatch();
+    const postId = navigation.getParam('postId');
+    
+    const post = useSelector(state => {
+        return state.post.allPosts.find(p => p.id === postId);
+    });
 
     const booked = useSelector(state => {
         return state.post.bookedPosts.some(post => post.id === postId);
@@ -34,12 +36,25 @@ export const PostScreen = ({ navigation }) => {
             'Удаление поста',
             'Вы точно хотите удалить этот пост?',
             [
-              {text: 'Отмена', style: 'cancel'},
-              {text: 'Удалить', style: 'destructive', onPress: () => {}},
+              { 
+                  text: 'Отмена', 
+                  style: 'cancel' 
+              },
+              {
+                  text: 'Удалить', 
+                  style: 'destructive', 
+                  onPress() {
+                    navigation.navigate('Main');
+                    dispatch(removePost(postId));
+              }},
             ],
             {cancelable: false},
           );
     };
+
+    if(!post) {
+        return null;
+    }
 
     return (
         <ScrollView>
